@@ -7,6 +7,20 @@ import os
 if not os.path.exists("data"):
  os.makedirs("data")
 
+# Languages for source files
+LANGUAGE_EXTENSIONS = {
+    "Python": [".py"],
+    "JavaScript": [".js", ".jsx"],
+    "Java": [".java"],
+    "C++": [".cpp", ".hpp", ".cc", ".h"],
+    "C": [".c", ".h"],
+    "Ruby": [".rb"],
+    "Go": [".go"],
+    "PHP": [".php"],
+    "Swift": [".swift"],
+    "Kotlin": [".kt", ".kts"],
+}
+
 # GitHub Authentication function
 def github_auth(url, lsttoken, ct):
     jsonData = None
@@ -20,6 +34,13 @@ def github_auth(url, lsttoken, ct):
         pass
         print(e)
     return jsonData, ct
+
+# Function to filter files by extensions
+def is_source_file(filename):
+    for extensions in LANGUAGE_EXTENSIONS.values():
+        if any(filename.endswith(ext) for ext in extensions):
+            return True
+    return False
 
 # @dictFiles, empty dictionary of files
 # @lstTokens, GitHub authentication tokens
@@ -47,14 +68,18 @@ def countfiles(dictfiles, lsttokens, repo):
                 filesjson = shaDetails['files']
                 for filenameObj in filesjson:
                     filename = filenameObj['filename']
-                    dictfiles[filename] = dictfiles.get(filename, 0) + 1
-                    print(filename)
+                    if is_source_file(filename):
+                        dictfiles[filename] = dictfiles.get(filename, 0) + 1
+                        print(filename)
             ipage += 1
     except:
         print("Error receiving data")
         exit(0)
+
+
 # GitHub repo
 repo = 'scottyab/rootbeer'
+
 # repo = 'Skyscanner/backpack' # This repo is commit heavy. It takes long to finish executing
 # repo = 'k9mail/k-9' # This repo is commit heavy. It takes long to finish executing
 # repo = 'mendhak/gpslogger'
@@ -64,7 +89,7 @@ repo = 'scottyab/rootbeer'
 # Remember to empty the list when going to commit to GitHub.
 # Otherwise they will all be reverted and you will have to re-create them
 # I would advise to create more than one token for repos with heavy commits
-lstTokens = ["123456"]
+lstTokens = ["123"]
 
 dictfiles = dict()
 countfiles(dictfiles, lstTokens, repo)
