@@ -11,7 +11,7 @@ csv_file = "data/rootbeer_authors_dates.csv"
 file_data = defaultdict(lambda: defaultdict(list))
 
 #initialize project start date
-project_start_date = datetime(2021, 3, 6)
+project_start_date = datetime(2015, 6, 19)
 
 # parse the file and populate the file_data dictionary
 with open(csv_file, 'r') as file:
@@ -58,7 +58,7 @@ for file_index, (filename, author_data) in enumerate(file_data.items()):
 # plot the scatter plot
 plt.figure(figsize=(10, 6))
 plt.scatter(x_weeks, y_fileIndices, c=colors)
-plt.xlabel("Week Number")
+plt.xlabel("Week Since Project Start")
 plt.ylabel("File Index")
 plt.title("Scatter Plot of Commits")
 plt.show()
